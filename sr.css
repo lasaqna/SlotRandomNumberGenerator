@@ -1,0 +1,39 @@
+body {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+}
+ 
+#field {
+    text-align: center;
+    position: relative;
+    height: auto;
+    width: calc(90vw);
+    max-width: 1000px;
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+canvas {
+    display: block;
+    background-color:blue;
+    width: 80%;
+    aspect-ratio: 16 /9;
+
+    margin: 0 auto;
+}
+
+#controlar{
+    display: block;
+    margin: 10px auto;
+}
+.button {
+    display: block;
+    background-color:white;
+    width: 100px;
+    height: 60px;
+}
+
+#start {
+    margin-right: 50px;
+}
