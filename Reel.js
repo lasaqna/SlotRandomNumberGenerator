@@ -56,7 +56,6 @@ class Reel{
         }
         this.numOnReel.push(new_num);
         this.draw();
-        await delay(200);
     }
 
     async stop(stop_num){

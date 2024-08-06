@@ -13,6 +13,9 @@ let rotate_flag=false;
 
 
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
 
@@ -23,10 +26,12 @@ start_button.addEventListener('click',async ()=>{
     rotate_flag=true;
     while(rotate_flag){
         reel.rotate();
+        await delay(200);
     }
     const left_rotate_num=Math.floor(Math.random()*20);
     for(let i=0;i<left_rotate_num;i++){
         reel.rotate();
+        await delay(200+i*20);
     }
     reel.stop(90);
 });
