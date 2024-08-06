@@ -23,12 +23,10 @@ start_button.addEventListener('click',async ()=>{
     rotate_flag=true;
     while(rotate_flag){
         reel.rotate();
-        await delay(200);
     }
     const left_rotate_num=Math.floor(Math.random()*20);
     for(let i=0;i<left_rotate_num;i++){
         reel.rotate();
-        await delay(200+20*i);
     }
     reel.stop(90);
 });

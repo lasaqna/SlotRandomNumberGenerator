@@ -47,7 +47,7 @@ class Reel{
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
     }
 
-    rotate(){
+    async rotate(){
         const n=Math.floor(Math.random()*100);
         let new_num=new Number(n,this.x_pos,this.height/2-2*this.font_size,this.context);
         const removedEle=this.numOnReel.shift();
@@ -56,6 +56,7 @@ class Reel{
         }
         this.numOnReel.push(new_num);
         this.draw();
+        await delay(200);
     }
 
     async stop(stop_num){
