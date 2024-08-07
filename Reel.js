@@ -33,6 +33,7 @@ class Reel{
     }
 
     setting(){
+        // setting context
         this.context.textBaseline='middle';
         this.context.textAlign='center';
         this.context.font=`80 ${this.font_size}px Impact`;
@@ -50,18 +51,24 @@ class Reel{
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
     }
 
+    fix_position(){
+        let y_pos=this.height/2+(this.display_num-1)/2*this.font_size;
+        for(let i=0;i<this.numOnReel.length;i++){
+            this.numOnReel[i].y_pos=y_pos;
+            y_pos-=this.font_size;
+        }
+    }
     rotate_animate(){
+        //  add new Number when a Number go out screen
         if(this.numOnReel[0].y_pos>this.height+this.font_size/2){
             const removedEle=this.numOnReel.shift();
-            let y_pos=this.height/2+(2)*this.font_size;
-            for(let i=0;i<this.numOnReel.length;i++){
-                this.numOnReel[i].y_pos=y_pos;
-                y_pos-=this.font_size;
-            }
+            this.fix_position();
+            
             const n=Math.floor(Math.random()*100);
             let new_num=new Number(n,this.x_pos,this.height/2-3*this.font_size,this.context);
             this.numOnReel.push(new_num);
         }   
+        // draw animation
         for(let i=0;i<this.numOnReel.length;i++){
             this.numOnReel[i].move(this.font_size/this.frame_per_rotate);
         }
@@ -73,11 +80,8 @@ class Reel{
     stop_animate(){
         if(this.numOnReel[0].y_pos>this.height+this.font_size/2){
             const removedEle=this.numOnReel.shift();
-            let y_pos=this.height/2+(2)*this.font_size;
-            for(let i=0;i<this.numOnReel.length;i++){
-                this.numOnReel[i].y_pos=y_pos;
-                y_pos-=this.font_size;
-            }
+            
+            this.fix_position();
             let n=Math.floor(Math.random()*100);
             const temp=Math.floor(Math.random()*10);
             if(temp<1)n=90;
@@ -89,9 +93,7 @@ class Reel{
                 this.flag=false;
                 return;
             }
-            this.frame_per_rotate=Math.max(this.frame_per_rotate+1,10);
-
-            
+            this.frame_per_rotate=Math.max(this.frame_per_rotate+1,10);  
         }   
         for(let i=0;i<this.numOnReel.length;i++){
             this.numOnReel[i].move(this.font_size/this.frame_per_rotate);
