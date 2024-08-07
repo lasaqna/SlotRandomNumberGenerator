@@ -23,19 +23,10 @@ function delay(ms) {
 let reel=new Reel(5,canvas,context);
 
 start_button.addEventListener('click',async ()=>{
-    rotate_flag=true;
-    while(rotate_flag){
-        reel.rotate();
-        await delay(200);
-    }
-    const left_rotate_num=Math.floor(Math.random()*20);
-    for(let i=0;i<left_rotate_num;i++){
-        reel.rotate();
-        await delay(200+i*20);
-    }
-    reel.stop(90);
+
+    window.requestAnimationFrame(reel.rotate_animate());
 });
 
 stop_button.addEventListener('click',() =>{
-    rotate_flag=false;
+    reel.flag=true;
 });
