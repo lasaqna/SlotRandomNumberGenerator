@@ -15,16 +15,19 @@ class Reel{
         this.context=context;
         this.gradient;
 
+        this.frame_per_rotate=7;
+        this.flag=false;
         this.numOnReel=[];
         this.x_pos=this.canvas.width/2;
         this.height=this.canvas.height;
         this.font_size=this.height/this.display_num;
         this.setting();
         // set  nums displayed firstly and display
-        for(let i=0;i<this.display_num;i++){
+        let y_pos=this.height/2+(2)*this.font_size;
+        for(let i=0;i<this.display_num+1;i++){
             const num=Math.floor(Math.random()*100);
-            let y_pos=this.height/2+(2-i)*this.font_size;
             this.numOnReel.push(new Number(num,this.x_pos,y_pos,this.context));
+            y_pos-=this.font_size;
         }
         this.draw();
     }
@@ -34,7 +37,7 @@ class Reel{
         this.context.textAlign='center';
         this.context.font=`80 ${this.font_size}px Impact`;
 
-        // this.gradient=this.context.createRadialGradient(this.canvas.width/2,this.canvas.height/2,this.canvas.width/4,this.canvas.width/2,this.canvas.height/2,this.canvas.width);
+        // setting gradient
         this.gradient=this.context.createLinearGradient(0,0,0,this.canvas.height);
         this.gradient.addColorStop(1,'blue');
         this.gradient.addColorStop(0.55,'cadetblue');
@@ -47,39 +50,66 @@ class Reel{
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
     }
 
-    async rotate(){
-        const n=Math.floor(Math.random()*100);
-        let new_num=new Number(n,this.x_pos,this.height/2-2*this.font_size,this.context);
-        const removedEle=this.numOnReel.shift();
-        for(let i=0;i<this.display_num-1;i++){
-            this.numOnReel[i].move(this.font_size);
+    rotate_animate(){
+        if(this.numOnReel[0].y_pos>this.height+this.font_size/2){
+            const removedEle=this.numOnReel.shift();
+            let y_pos=this.height/2+(2)*this.font_size;
+            for(let i=0;i<this.numOnReel.length;i++){
+                this.numOnReel[i].y_pos=y_pos;
+                y_pos-=this.font_size;
+            }
+            const n=Math.floor(Math.random()*100);
+            let new_num=new Number(n,this.x_pos,this.height/2-3*this.font_size,this.context);
+            this.numOnReel.push(new_num);
+        }   
+        for(let i=0;i<this.numOnReel.length;i++){
+            this.numOnReel[i].move(this.font_size/this.frame_per_rotate);
         }
-        this.numOnReel.push(new_num);
         this.draw();
+        if(!this.flag)requestAnimationFrame(this.rotate_animate.bind(this));
+        else requestAnimationFrame(this.stop_animate.bind(this));
+    }
+    
+    stop_animate(){
+        if(this.numOnReel[0].y_pos>this.height+this.font_size/2){
+            const removedEle=this.numOnReel.shift();
+            let y_pos=this.height/2+(2)*this.font_size;
+            for(let i=0;i<this.numOnReel.length;i++){
+                this.numOnReel[i].y_pos=y_pos;
+                y_pos-=this.font_size;
+            }
+            let n=Math.floor(Math.random()*100);
+            const temp=Math.floor(Math.random()*15);
+            if(temp<1)n=90;
+            let new_num=new Number(n,this.x_pos,this.height/2-3*this.font_size,this.context);
+            this.numOnReel.push(new_num);
+
+            if(this.numOnReel[2].num==90 && this.frame_per_rotate>=10 ){
+                this.frame_per_rotate=5;
+                this.flag=false;
+                return;
+            }
+            this.frame_per_rotate=Math.max(this.frame_per_rotate+1,10);
+
+            
+        }   
+        for(let i=0;i<this.numOnReel.length;i++){
+            this.numOnReel[i].move(this.font_size/this.frame_per_rotate);
+        }
+        this.draw();
+        requestAnimationFrame(this.stop_animate.bind(this));
     }
 
-    async stop(stop_num){
-        let stop_Num=new Number(stop_num,this.x_pos,this.height/2-2*this.font_size,this.context);
-        const removedEle=this.numOnReel.shift();
-        for(let i=0;i<this.display_num-1;i++){
-            this.numOnReel[i].move(this.font_size);
-        }
-        this.numOnReel.push(stop_Num);
-        this.draw();
-        await delay(500);
-        for(let i=0;i<2;i++){
-            this.rotate();
-            await delay(500);
-        }
-    }
 
     draw(){
         this.context.clearRect(0,0,this.canvas.width,this.height);
         this.draw_background();
-        for(let i=0;i<this.display_num;i++){
-            
-            if(i==(this.display_num-1)/2)this.context.fillStyle='aqua';
-            else this.context.fillStyle='white';
+        for(let i=0;i<this.numOnReel.length;i++){
+            if(Math.abs(this.numOnReel[i].y_pos-this.height/2)<this.font_size/2){
+                this.context.fillStyle='aqua';
+            }else{
+                 this.context.fillStyle='white';
+            }
             this.numOnReel[i].draw();
         }
     }
