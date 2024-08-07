@@ -79,7 +79,7 @@ class Reel{
                 y_pos-=this.font_size;
             }
             let n=Math.floor(Math.random()*100);
-            const temp=Math.floor(Math.random()*15);
+            const temp=Math.floor(Math.random()*10);
             if(temp<1)n=90;
             let new_num=new Number(n,this.x_pos,this.height/2-3*this.font_size,this.context);
             this.numOnReel.push(new_num);
