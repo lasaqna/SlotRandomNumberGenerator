@@ -15,7 +15,7 @@ class Reel{
         this.context=context;
         this.gradient;
 
-        this.frame_per_rotate=7;
+        this.frame_per_rotate=5;
         this.flag=false;
         this.numOnReel=[];
         this.x_pos=this.canvas.width/2;
